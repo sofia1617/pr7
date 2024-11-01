@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Редактировать Заказ</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container mt-5">
+    <h1>Редактировать Заказ</h1>
+    <form th:action="@{/orders/edit/{id}(id=${order.id})}" th:object="${order}" method="post">
+        <input type="hidden" th:field="*{id}" />
+
+        <div class="form-group">
+            <label for="numberOrder">Номер Заказа</label>
+            <input type="text" class="form-control" id="numberOrder" th:field="*{numberOrder}" required>
+        </div>
+
+        <div class="form-group">
+            <label for="user">Пользователь</label>
+            <select id="user" name="user.id" th:field="*{user.id}" required>
+                <option th:each="user : ${users}"
+                        th:value="${user.id}"
+                        th:text="${user.name + ' ' + user.surname}"
+                        th:selected="${user.id == order.user.id}"></option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="products">Продукты</label>
+            <select multiple id="products" name="products" th:field="*{products}" required>
+                <option th:each="product : ${products}"
+                        th:value="${product.id}"
+                        th:text="${product.name}"
+                        th:selected="${#lists.contains(order.products, product)}"></option>
+            </select>
+            <small class="form-text text-muted">Удерживайте Ctrl для выбора нескольких продуктов.</small>
+        </div>
+
+        <div class="form-group">
+            <label for="status">Статус</label>
+            <select id="status" name="status.id" th:field="*{status.id}" required>
+                <option th:each="status : ${statuses}"
+                        th:value="${status.id}"
+                        th:text="${status.name}"
+                        th:selected="${status.id == order.status.id}"></option>
+            </select>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Сохранить</button>
+        <a href="/orders" class="btn btn-secondary">Отмена</a>
+    </form>
+</div>
+</body>
+</html>

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Редактировать Пользователя</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container mt-5">
+    <h1>Редактировать Пользователя</h1>
+    <form th:action="@{/superuser/listUsers/edit/{id}(id=${user.id})}" th:object="${user}" method="post">
+        <div class="form-group">
+            <label for="name">Имя</label>
+            <input type="text" class="form-control" id="name" th:field="*{name}" required>
+        </div>
+        <div class="form-group">
+            <label for="surname">Фамилия</label>
+            <input type="text" class="form-control" id="surname" th:field="*{surname}" required>
+        </div>
+        <div class="form-group">
+            <label for="pathronymic">Отчество</label>
+            <input type="text" class="form-control" id="pathronymic" th:field="*{pathronymic}" required>
+        </div>
+        <div class="form-group">
+            <label for="login">Логин</label>
+            <input type="text" class="form-control" id="login" th:field="*{login}" required>
+        </div>
+        <div class="form-group">
+            <label for="password">Пароль</label>
+            <input type="password" class="form-control" id="password" th:field="*{password}" placeholder="Оставьте пустым, если не хотите менять">
+        </div>
+        <div class="form-group">
+            <label for="role">Роль</label>
+            <select class="form-control" id="role" th:field="*{role.id}">
+                <option th:each="role : ${roles}" th:value="${role.id}" th:text="${role.name}"
+                        th:selected="${role.id == user.role.id}"></option>
+            </select>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Сохранить изменения</button>
+        <a th:href="@{/superuser/listUsers}" class="btn btn-secondary">Отмена</a>
+    </form>
+</div>
+</body>
+</html>

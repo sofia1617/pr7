@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Редактировать продукт</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+<header class="container mt-5">
+  <h1>Редактировать продукт</h1>
+  <nav>
+    <a th:href="@{/superuser/listProducts}" class="btn btn-secondary">Назад</a>
+  </nav>
+</header>
+<main class="container mt-4">
+  <form th:action="@{/superuser/products/{id}(id=${product.id})}" method="post">
+    <div class="form-group">
+      <label for="name">Название продукта:</label>
+      <input type="text" id="name" name="name" class="form-control" th:value="${product.name}" required>
+    </div>
+    <div class="form-group">
+      <label for="description">Описание:</label>
+      <textarea id="description" name="description" class="form-control" th:text="${product.description}" required></textarea>
+    </div>
+    <div class="form-group">
+      <label for="price">Цена:</label>
+      <input type="number" id="price" name="price" class="form-control" step="0.01" th:value="${product.price}" required>
+    </div>
+    <div class="form-group">
+      <label for="count">Количество:</label>
+      <input type="number" id="count" name="count" class="form-control" th:value="${product.count}" required>
+    </div>
+    <div class="form-group">
+      <label for="category">Категория:</label>
+      <select id="category" name="category.id" class="form-control" required>
+        <option th:each="category : ${categories}"
+                th:value="${category.id}"
+                th:text="${category.name}"
+                th:selected="${category.id == product.category.id}"></option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="manufacturer">Производитель:</label>
+      <select id="manufacturer" name="manufacturer.id" class="form-control" required>
+        <option th:each="manufacturer : ${manufacturers}"
+                th:value="${manufacturer.id}"
+                th:text="${manufacturer.name}"
+                th:selected="${manufacturer.id == product.manufacturer.id}"></option>
+      </select>
+    </div>
+    <button type="submit" class="btn btn-primary">Сохранить изменения</button>
+  </form>
+</main>
+</body>
+</html>

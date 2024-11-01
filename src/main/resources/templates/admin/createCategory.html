@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Создать Категорию</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-light bg-light mb-4">
+    <div class="collapse navbar-collapse">
+        <ul class="navbar-nav ml-auto">
+            <!-- Ваши навигационные ссылки -->
+        </ul>
+    </div>
+</nav>
+
+<div class="container mt-5">
+    <h1>Создать Категорию</h1>
+
+    <form th:action="@{/admin/categories}" method="post"> <!-- Исправлено -->
+        <div class="form-group">
+            <label for="name">Название</label>
+            <input type="text" id="name" name="name" class="form-control" required />
+        </div>
+        <div class="form-group">
+            <label for="description">Описание</label>
+            <textarea id="description" name="description" class="form-control"></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Создать</button>
+        <a th:href="@{/admin/listCategories}" class="btn btn-secondary">Отменить</a>
+    </form>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

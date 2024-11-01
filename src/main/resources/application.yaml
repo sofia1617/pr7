@@ -1,0 +1,22 @@
+spring:
+  config:
+    name: project2
+  datasource:
+    url: jdbc:postgresql://localhost:5432/SpringDB
+    username: postgres
+    password: 123
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update  # Изменено с create-drop на update
+    database: postgresql
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+server:
+  servlet:
+    session:
+      timeout: 15m
+  port: 8081

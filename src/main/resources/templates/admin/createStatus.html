@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Создать Статус</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container mt-5">
+    <h1>Создать Статус</h1>
+    <form action="/admin/statuses" method="post">
+        <div class="form-group">
+            <label for="name">Название статуса:</label>
+            <input type="text" id="name" name="name" class="form-control" maxlength="13" required>
+        </div>
+        <div class="form-group">
+            <label for="deleted">Удалено:</label>
+            <select id="deleted" name="deleted" class="form-control">
+                <option value="false">Нет</option>
+                <option value="true">Да</option>
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary">Создать статус</button>
+        <a href="/admin/listStatuses" class="btn btn-secondary">Назад</a>
+    </form>
+</div>
+</body>
+</html>

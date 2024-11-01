@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Пользователи - Суперпользователь</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-light bg-light mb-4">
+    <div class="collapse navbar-collapse">
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="/superuser/listUsers">Пользователи</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/superuser/listRoles">Роли</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/superuser/listManufacturers">Поставщики</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/superuser/listStatuses">Статусы</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/superuser/listOrders">Заказы</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/superuser/listCategories">Категории</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/superuser/listProducts">Товары</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+<div class="container mt-5">
+    <header>
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h1>Пользователи - Суперпользователь</h1>
+            <a href="/auth/login" class="btn btn-primary">Выход</a>
+        </div>
+        <nav>
+            <a href="/superuser/createUser" class="btn btn-primary mb-3">Добавить пользователя</a>
+        </nav>
+    </header>
+
+    <!-- Форма для поиска пользователей -->
+    <form action="/superuser/listUsers" method="get" class="mb-4">
+        <input type="text" name="search" placeholder="Поиск по имени" class="form-control" th:value="${search}">
+        <button type="submit" class="btn btn-primary mt-2">Поиск</button>
+    </form>
+
+    <main>
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Имя</th>
+                <th>Фамилия</th>
+                <th>Отчество</th>
+                <th>Логин</th>
+                <th>Действия</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="user : ${users}">
+                <td th:text="${user.id}"></td>
+                <td th:text="${user.name}"></td>
+                <td th:text="${user.surname}"></td>
+                <td th:text="${user.pathronymic}"></td>
+                <td th:text="${user.login}"></td>
+                <td>
+                    <a th:href="@{/superuser/listUsers/edit/{id}(id=${user.id})}" class="btn btn-primary">Редактировать</a>
+                    <a th:href="@{/superuser/deleteUser/{id}(id=${user.id})}" class="btn btn-danger">Удалить</a>
+
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </main>
+</div>
+</body>
+</html>
