@@ -1,10 +1,10 @@
 package com.example.project2.controller;
 
-import com.example.project2.model.OrderModel;
-import com.example.project2.service.OrderService;
+import com.example.project2.model.ServicesModel;
+import com.example.project2.service.ServicesService;
 import com.example.project2.service.UserService;
-import com.example.project2.service.ProductService;
-import com.example.project2.service.StatusService;
+import com.example.project2.service.RecordsService;
+import com.example.project2.service.ChartService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,52 +16,52 @@ import java.util.Optional;
 @RequestMapping("/api/orders")
 public class OrderControllerAPI {
 
-    private final OrderService orderService;
+    private final ServicesService servicesService;
     private final UserService userService;
-    private final ProductService productService;
-    private final StatusService statusService;
+    private final RecordsService recordsService;
+    private final ChartService chartService;
 
     @Autowired
-    public OrderControllerAPI(OrderService orderService, UserService userService, ProductService productService, StatusService statusService) {
-        this.orderService = orderService;
+    public OrderControllerAPI(ServicesService servicesService, UserService userService, RecordsService recordsService, ChartService chartService) {
+        this.servicesService = servicesService;
         this.userService = userService;
-        this.productService = productService;
-        this.statusService = statusService;
+        this.recordsService = recordsService;
+        this.chartService = chartService;
     }
 
     @GetMapping
-    public List<OrderModel> getAllOrders() {
-        return orderService.findAll();
+    public List<ServicesModel> getAllOrders() {
+        return servicesService.findAll();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<OrderModel> getOrderById(@PathVariable Long id) {
-        Optional<OrderModel> order = Optional.ofNullable(orderService.findById(id));
+    public ResponseEntity<ServicesModel> getOrderById(@PathVariable Long id) {
+        Optional<ServicesModel> order = Optional.ofNullable(servicesService.findById(id));
         return order.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @PostMapping
-    public OrderModel createOrder(@RequestBody OrderModel order) {
-        return orderService.save(order);
+    public ServicesModel createOrder(@RequestBody ServicesModel service) {
+        return servicesService.save(service);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<OrderModel> updateOrder(@PathVariable Long id, @RequestBody OrderModel orderDetails) {
-        Optional<OrderModel> orderOptional = Optional.ofNullable(orderService.findById(id));
+    public ResponseEntity<ServicesModel> updateOrder(@PathVariable Long id, @RequestBody ServicesModel orderDetails) {
+        Optional<ServicesModel> orderOptional = Optional.ofNullable(servicesService.findById(id));
         if (orderOptional.isPresent()) {
-            OrderModel order = orderOptional.get();
+            ServicesModel order = orderOptional.get();
             order.setUser(orderDetails.getUser());
-            order.setProducts(orderDetails.getProducts());
-            order.setStatus(orderDetails.getStatus());
+            order.setNumberRecords(orderDetails.getNumberRecords());
+            order.setChart(orderDetails.getChart());
             // Добавьте другие поля для обновления, если они есть
-            return ResponseEntity.ok(orderService.save(order));
+            return ResponseEntity.ok(servicesService.save(order));
         }
         return ResponseEntity.notFound().build();
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteOrder(@PathVariable Long id) {
-        orderService.deleteById(id);
+        servicesService.deleteById(id);
         return ResponseEntity.noContent().build();
     }
 }

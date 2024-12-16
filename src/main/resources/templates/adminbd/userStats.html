@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Статистика пользователей</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column; /* Выравнивание элементов по вертикали */
+      height: 100vh;
+      background-color: #ffffff;
+      color: #333;
+    }
+
+    nav {
+      margin-bottom: 30px; /* Отступ снизу для меню */
+    }
+
+    .container {
+      text-align: center;
+      background-color: rgba(202, 200, 200, 0.25);
+      border-radius: 8px;
+      padding: 20px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      width: 90%;
+      max-width: 600px;
+      margin-top: 20px; /* Отступ сверху для статистики */
+    }
+
+    h1 {
+      font-size: 24px;
+      color: #000000;
+      margin-bottom: 20px;
+    }
+
+    canvas {
+      max-width: 100%;
+      height: auto;
+    }
+  </style>
+</head>
+<body>
+
+<!-- Меню -->
+<nav class="navbar navbar-expand-lg navbar-light bg-light mb-4">
+  <div class="collapse navbar-collapse">
+    <ul class="navbar-nav ml-auto">
+      <li class="nav-item">
+        <a class="nav-link" href="/adminbd/listUsers">Пользователи</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/adminbd/data-management">Экспорт и импорт</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/adminbd/userStats">Статистика по ролям</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/adminbd/backup">Резервное копирование и логирование</a>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+<!-- Статистика -->
+<div class="container">
+  <h1>Количество пользователей по ролям</h1>
+  <canvas id="userStatsChart" width="400" height="200"></canvas>
+</div>
+
+<script th:inline="javascript">
+  /*<![CDATA[*/
+  var adminbdCount = /*[[${adminbdCount}]]*/ 0;
+  var adminsalonaCount = /*[[${adminsalonaCount}]]*/ 0;
+  var employeeCount = /*[[${employeeCount}]]*/ 0;
+
+
+  var ctx = document.getElementById('userStatsChart').getContext('2d');
+  var chart = new Chart(ctx, {
+    type: 'bar', // Тип диаграммы
+    data: {
+      labels: ['AdminBD', 'AdminSalona', 'Employee'],
+      datasets: [{
+        label: 'Количество пользователей',
+        data: [adminbdCount, adminsalonaCount, employeeCount],
+        backgroundColor: ['rgba(255, 99, 132, 0.2)', 'rgba(54, 162, 235, 0.2)', 'rgba(75, 192, 192, 0.2)'],
+        borderColor: ['rgba(255, 99, 132, 1)', 'rgba(54, 162, 235, 1)', 'rgba(75, 192, 192, 1)'],
+        borderWidth: 1
+      }]
+    },
+    options: {
+      plugins: {
+        legend: {
+          display: false // Отключаем отображение легенды
+        }
+      },
+      scales: {
+        y: {
+          beginAtZero: true
+        }
+      }
+    }
+  });
+  /*]]>*/
+</script>
+
+</body>
+</html>

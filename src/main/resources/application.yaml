@@ -20,3 +20,13 @@ server:
     session:
       timeout: 15m
   port: 8081
+
+logging:
+  file:
+    name: logs/application.log
+
+backup:
+  directory: C:/Users/PC/Desktop/pract0401-main/backups/
+
+
+

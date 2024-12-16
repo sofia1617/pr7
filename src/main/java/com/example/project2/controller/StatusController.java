@@ -1,7 +1,7 @@
 package com.example.project2.controller;
 
-import com.example.project2.model.StatusModel;
-import com.example.project2.service.StatusService;
+import com.example.project2.model.ChartModel;
+import com.example.project2.service.ChartService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,20 +12,20 @@ import java.util.List;
 @Controller
 @RequestMapping("/statuses")
 public class StatusController {
-    private final StatusService statusService;
+    private final ChartService chartService;
 
     @Autowired
-    public StatusController(StatusService statusService) {
-        this.statusService = statusService;
+    public StatusController(ChartService chartService) {
+        this.chartService = chartService;
     }
 
     @GetMapping
     public String listStatuses(@RequestParam(value = "search", required = false) String search, Model model) {
-        List<StatusModel> statuses;
+        List<ChartModel> statuses;
         if (search != null && !search.isEmpty()) {
-            statuses = statusService.findByNameContainingIgnoreCase(search); // Поиск статусов по имени
+            statuses = chartService.findByNameContainingIgnoreCase(search); // Поиск статусов по имени
         } else {
-            statuses = statusService.findAll(); // Получить все статусы
+            statuses = chartService.findAll(); // Получить все статусы
         }
         model.addAttribute("statuses", statuses);
         model.addAttribute("search", search); // Передать поисковый запрос в модель
@@ -34,33 +34,33 @@ public class StatusController {
 
     @GetMapping("/create")
     public String showCreateForm(Model model) {
-        model.addAttribute("status", new StatusModel());
+        model.addAttribute("status", new ChartModel());
         return "createStatus";  // Путь к HTML-шаблону
     }
 
     @PostMapping
-    public String createStatus(@ModelAttribute StatusModel status) {
-        statusService.save(status);
+    public String createStatus(@ModelAttribute ChartModel status) {
+        chartService.save(status);
         return "redirect:/statuses";
     }
 
     @GetMapping("/edit/{id}")
     public String showEditForm(@PathVariable Long id, Model model) {
-        StatusModel status = statusService.findById(id);
+        ChartModel status = chartService.findById(id);
         model.addAttribute("status", status);
         return "editStatus";  // Путь к HTML-шаблону
     }
 
     @PostMapping("/edit/{id}")
-    public String updateStatus(@PathVariable Long id, @ModelAttribute StatusModel status) {
+    public String updateStatus(@PathVariable Long id, @ModelAttribute ChartModel status) {
         status.setId(id);
-        statusService.save(status);
+        chartService.save(status);
         return "redirect:/statuses";
     }
 
     @GetMapping("/delete/{id}")
     public String deleteStatus(@PathVariable Long id) {
-        statusService.deleteById(id);
+        chartService.deleteById(id);
         return "redirect:/statuses";
     }
 }

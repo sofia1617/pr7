@@ -23,6 +23,8 @@ public class UserModel {
     @Size(max = 25, message = "Максимальная длинна = 25 символов")
     private String name;
 
+    private String username;
+
     @NotBlank(message = "Поле не может быть пустым")
     @Size(max = 25, message = "Максимальная длинна = 25 символов")
     private String surname;

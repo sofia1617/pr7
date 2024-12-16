@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Логи</title>
+</head>
+<body>
+<h1>Логи системы</h1>
+
+<ul>
+  <li th:each="log : ${logs}">
+    <pre th:text="${log}"></pre>
+  </li>
+</ul>
+
+<a th:href="@{/templates/adminbd/backup}">Назад</a>
+</body>
+</html>

@@ -55,30 +55,30 @@ public class AuthController {
 
     // Регистрация пользователя
     @PostMapping("/register")
-    public String registerUser(@ModelAttribute("user") UserModel user, BindingResult result, Model model) {
+    public String registerUser(@ModelAttribute("employee") UserModel employee, BindingResult result, Model model) {
         if (result.hasErrors()) {
             model.addAttribute("roles", roleService.findAll());
-            return "authentication/register"; // Исправлено имя шаблона
+            return "authentication/register";
         }
 
         // Проверка на существование пользователя с таким логином
-        if (userService.existsByLogin(user.getLogin())) {
+        if (userService.existsByLogin(employee.getLogin())) {
             model.addAttribute("errorMessage", "Пользователь с таким логином уже существует");
             model.addAttribute("roles", roleService.findAll());
-            return "authentication/register"; // Исправлено имя шаблона
+            return "authentication/register";
         }
 
-        RoleModel role = roleService.findByName("User"); // Ищем роль с большой буквы
-        user.setRole(role);
+        RoleModel role = roleService.findByName("Employee");
+        employee.setRole(role);
 
-        if (user.getPassword() == null || user.getPassword().isEmpty()) {
+        if (employee.getPassword() == null || employee.getPassword().isEmpty()) {
             model.addAttribute("errorMessage", "Пароль не должен быть пустым");
             model.addAttribute("roles", roleService.findAll());
-            return "authentication/register"; // Исправлено имя шаблона
+            return "authentication/register";
         }
 
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        userService.save(user);
+        employee.setPassword(passwordEncoder.encode(employee.getPassword()));
+        userService.save(employee);
         return "redirect:/auth/login";
     }
 
@@ -98,7 +98,7 @@ public class AuthController {
             // Проверка успешной аутентификации
             if (authentication.isAuthenticated()) {
                 SecurityContextHolder.getContext().setAuthentication(authentication);
-                session.setAttribute("user", authentication.getPrincipal());
+                session.setAttribute("Employee", authentication.getPrincipal());
 
                 // Перенаправление в зависимости от роли
                 String redirectUrl = determineRedirectUrl(authentication);
@@ -116,12 +116,12 @@ public class AuthController {
     // Метод для определения URL перенаправления в зависимости от роли
     private String determineRedirectUrl(Authentication authentication) {
         // Проверяем роли пользователя
-        if (authentication.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_User"))) {
-            return "/user/listProducts";
-        } else if (authentication.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_Admin"))) {
-            return "/admin/listUsers";
-        } else if (authentication.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_SUPERUSER"))) {
-            return "/superuser/listUsers";
+        if (authentication.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_Employee"))) {
+            return "/employee/listChart";
+        } else if (authentication.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_AdminBD"))) {
+            return "/adminbd/listUsers";
+        } else if (authentication.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_AdminSalona"))) {
+            return "/adminsalona/listUsers";
         } else {
             throw new IllegalArgumentException("Не существует");
         }

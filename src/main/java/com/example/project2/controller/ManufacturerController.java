@@ -1,7 +1,7 @@
 package com.example.project2.controller;
 
-import com.example.project2.model.ManufacturerModel;
-import com.example.project2.service.ManufacturerService;
+import com.example.project2.model.Product_and_materialsModel;
+import com.example.project2.service.Product_and_materialsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,15 +14,15 @@ import java.util.List;
 public class ManufacturerController {
 
     @Autowired
-    private ManufacturerService manufacturerService;
+    private Product_and_materialsService productandmaterialsService;
 
     @GetMapping
     public String listManufacturers(@RequestParam(value = "search", required = false) String search, Model model) {
-        List<ManufacturerModel> manufacturers;
+        List<Product_and_materialsModel> manufacturers;
         if (search != null && !search.isEmpty()) {
-            manufacturers = manufacturerService.findByNameContainingIgnoreCase(search); // Поиск производителей по имени
+            manufacturers = productandmaterialsService.findByNameContainingIgnoreCase(search); // Поиск производителей по имени
         } else {
-            manufacturers = manufacturerService.findAll(); // Получить всех производителей
+            manufacturers = productandmaterialsService.findAll(); // Получить всех производителей
         }
         model.addAttribute("manufacturers", manufacturers);
         model.addAttribute("search", search); // Передать поисковый запрос в модель
@@ -31,34 +31,34 @@ public class ManufacturerController {
 
     @GetMapping("/create")
     public String showCreateForm(Model model) {
-        model.addAttribute("manufacturer", new ManufacturerModel());
+        model.addAttribute("manufacturer", new Product_and_materialsModel());
         return "createManufacturer"; // Имя HTML-шаблона для создания производителя
     }
 
     @PostMapping
-    public String createManufacturer(@ModelAttribute ManufacturerModel manufacturer) {
-        manufacturerService.save(manufacturer);
+    public String createManufacturer(@ModelAttribute Product_and_materialsModel manufacturer) {
+        productandmaterialsService.save(manufacturer);
         return "redirect:/manufacturers"; // Перенаправление после создания
     }
 
     @GetMapping("/edit/{id}")
     public String showEditForm(@PathVariable Long id, Model model) {
-        ManufacturerModel manufacturer = manufacturerService.findById(id)
+        Product_and_materialsModel manufacturer = productandmaterialsService.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid manufacturer ID:" + id));
         model.addAttribute("manufacturer", manufacturer);
         return "editManufacturer"; // Имя HTML-шаблона для редактирования производителя
     }
 
     @PostMapping("/{id}")
-    public String updateManufacturer(@PathVariable Long id, @ModelAttribute ManufacturerModel manufacturer) {
+    public String updateManufacturer(@PathVariable Long id, @ModelAttribute Product_and_materialsModel manufacturer) {
         manufacturer.setId(id);
-        manufacturerService.save(manufacturer);
+        productandmaterialsService.save(manufacturer);
         return "redirect:/manufacturers"; // Перенаправление после редактирования
     }
 
     @GetMapping("/delete/{id}")
     public String deleteManufacturer(@PathVariable Long id) {
-        manufacturerService.deleteById(id);
+        productandmaterialsService.deleteById(id);
         return "redirect:/manufacturers"; // Перенаправление после удаления
     }
 }

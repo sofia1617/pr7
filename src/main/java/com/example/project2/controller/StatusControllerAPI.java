@@ -1,8 +1,7 @@
 package com.example.project2.controller;
 
-import com.example.project2.model.StatusModel;
-import com.example.project2.service.StatusService;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.example.project2.model.ChartModel;
+import com.example.project2.service.ChartService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,43 +12,44 @@ import java.util.Optional;
 @RequestMapping("/api/statuses")
 public class StatusControllerAPI {
 
-    private final StatusService statusService;
+    private final ChartService chartService;
 
-    public StatusControllerAPI(StatusService statusService) {
-        this.statusService = statusService;
+    public StatusControllerAPI(ChartService chartService) {
+        this.chartService = chartService;
     }
 
     @GetMapping
-    public List<StatusModel> getAllStatuses() {
-        return statusService.findAll();
+    public List<ChartModel> getAllStatuses() {
+        return chartService.findAll();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<StatusModel> getStatusById(@PathVariable Long id) {
-        Optional<StatusModel> status = Optional.ofNullable(statusService.findById(id));
+    public ResponseEntity<ChartModel> getStatusById(@PathVariable Long id) {
+        Optional<ChartModel> status = Optional.ofNullable(chartService.findById(id));
         return status.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @PostMapping
-    public StatusModel createStatus(@RequestBody StatusModel status) {
-        return statusService.save(status);
+    public ChartModel createStatus(@RequestBody ChartModel chart) {
+        return chartService.save(chart);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<StatusModel> updateStatus(@PathVariable Long id, @RequestBody StatusModel statusDetails) {
-        Optional<StatusModel> statusOptional = Optional.ofNullable(statusService.findById(id));
+    public ResponseEntity<ChartModel> updateStatus(@PathVariable Long id, @RequestBody ChartModel statusDetails) {
+        Optional<ChartModel> statusOptional = Optional.ofNullable(chartService.findById(id));
         if (statusOptional.isPresent()) {
-            StatusModel status = statusOptional.get();
-            status.setName(statusDetails.getName());
+            ChartModel chart = statusOptional.get();
+            chart.setName(statusDetails.getName());
             // Добавьте другие поля для обновления, если они есть
-            return ResponseEntity.ok(statusService.save(status));
+
+            return ResponseEntity.ok(chartService.save(chart));
         }
         return ResponseEntity.notFound().build();
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteStatus(@PathVariable Long id) {
-        statusService.deleteById(id);
+        chartService.deleteById(id);
         return ResponseEntity.noContent().build();
     }
 }

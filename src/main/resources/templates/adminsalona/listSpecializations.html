@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Список специализаций</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-light bg-light mb-4">
+  <div class="collapse navbar-collapse">
+    <ul class="navbar-nav ml-auto">
+      <li class="nav-item"><a class="nav-link" href="/adminsalona/listUsers">Пользователи</a></li>
+      <li class="nav-item"><a class="nav-link" href="/adminsalona/listRoles">Роли</a></li>
+      <li class="nav-item"><a class="nav-link" href="/adminsalona/listProducts_and_materials">Товары и материалы</a></li>
+      <li class="nav-item"><a class="nav-link" href="/adminsalona/listChart">График</a></li>
+      <li class="nav-item"><a class="nav-link" href="/adminsalona/listServices">Услуги</a></li>
+      <li class="nav-item"><a class="nav-link" href="/adminsalona/listClients">Клиенты</a></li>
+      <li class="nav-item"><a class="nav-link" href="/adminsalona/listRecords">Записи</a></li>
+      <li class="nav-item"><a class="nav-link" href="/adminsalona/listSpecializations">Специальности</a></li>
+    </ul>
+  </div>
+</nav>
+
+<div class="container mt-5">
+  <header>
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <h1>Список специализаций - Администратор Салона красоты</h1>
+      <a href="/auth/login" class="btn btn-primary">Выход</a>
+    </div>
+    <nav>
+      <a href="/adminsalona/createSpecialization" class="btn btn-primary mb-3">Добавить специализацию</a>
+    </nav>
+  </header>
+
+
+
+  <main>
+    <table class="table table-striped">
+      <thead>
+      <tr>
+        <th>Название</th>
+        <th>Пользователь</th>
+        <th>Действия</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr th:each="specialization : ${specializations}">
+        <td th:text="${specialization.name}"></td>
+        <td th:text="${specialization.user.name}"></td>
+        <td>
+          <a th:href="@{/adminsalona/listSpecializations/edit/{id}(id=${specialization.id})}" class="btn btn-primary">Редактировать</a>
+          <a th:href="@{/adminsalona/deleteSpecialization/{id}(id=${specialization.id})}" class="btn btn-danger">Удалить</a>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </main>
+</div>
+</body>
+</html>

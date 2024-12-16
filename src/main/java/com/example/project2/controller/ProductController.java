@@ -1,11 +1,10 @@
 package com.example.project2.controller;
 
-import com.example.project2.model.ProductModel;
-import com.example.project2.service.CategoryService;
-import com.example.project2.service.ManufacturerService;
-import com.example.project2.service.ProductService;
+import com.example.project2.model.RecordsModel;
+import com.example.project2.service.ClientsService;
+import com.example.project2.service.Product_and_materialsService;
+import com.example.project2.service.RecordsService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,13 +20,13 @@ import java.util.List;
 public class ProductController {
 
     @Autowired
-    private ProductService productService;
+    private RecordsService recordsService;
 
     @Autowired
-    private CategoryService categoryService;
+    private ClientsService clientsService;
 
     @Autowired
-    private ManufacturerService manufacturerService;
+    private Product_and_materialsService productandmaterialsService;
 
     @GetMapping
     @PreAuthorize("hasAuthority('ROLE_USER') or hasAuthority('ROLE_SUPERUSER')")
@@ -36,10 +35,10 @@ public class ProductController {
                                @RequestParam(defaultValue = "name") String sortField,
                                @RequestParam(defaultValue = "asc") String sortDir,
                                Model model) {
-        List<ProductModel> products = productService.findAll();
+        List<RecordsModel> products = recordsService.findAll();
         model.addAttribute("products", products);
         Sort sort = sortDir.equalsIgnoreCase("asc") ? Sort.by(sortField).ascending() : Sort.by(sortField).descending();
-        Page<ProductModel> productsPage = productService.findPaginated(PageRequest.of(page, size, sort));
+        Page<RecordsModel> productsPage = recordsService.findPaginated(PageRequest.of(page, size, sort));
         model.addAttribute("productsPage", productsPage);
         model.addAttribute("currentPage", page);
         model.addAttribute("sortField", sortField);
@@ -53,40 +52,40 @@ public class ProductController {
     @GetMapping("/create")
     @PreAuthorize("hasAuthority('ROLE_SUPERUSER') or hasAuthority('ROLE_MANAGER')")
     public String showCreateForm(Model model) {
-        model.addAttribute("product", new ProductModel());
-        model.addAttribute("categories", categoryService.findAll());
-        model.addAttribute("manufacturers", manufacturerService.findAll());
+        model.addAttribute("product", new RecordsModel());
+        model.addAttribute("categories", clientsService.findAll());
+        model.addAttribute("manufacturers", productandmaterialsService.findAll());
         return "createProduct"; // Имя HTML-шаблона для создания продукта
     }
 
 
     @PostMapping
     @PreAuthorize("hasAuthority('ROLE_SUPERUSER')")
-    public String createProduct(@ModelAttribute ProductModel product) {
-        productService.save(product);
+    public String createProduct(@ModelAttribute RecordsModel product) {
+        recordsService.save(product);
         return "redirect:/products"; // Перенаправление после создания
     }
 
     @GetMapping("/edit/{id}")
     public String showEditForm(@PathVariable Long id, Model model) {
-        ProductModel product = productService.findById(id)
+        RecordsModel product = recordsService.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid product ID:" + id));
         model.addAttribute("product", product);
-        model.addAttribute("categories", categoryService.findAll());
-        model.addAttribute("manufacturers", manufacturerService.findAll());
+        model.addAttribute("categories", clientsService.findAll());
+        model.addAttribute("manufacturers", productandmaterialsService.findAll());
         return "editProduct"; // Имя HTML-шаблона для редактирования продукта
     }
 
     @PostMapping("/{id}")
-    public String updateProduct(@PathVariable Long id, @ModelAttribute ProductModel product) {
+    public String updateProduct(@PathVariable Long id, @ModelAttribute RecordsModel product) {
         product.setId(id);
-        productService.save(product);
+        recordsService.save(product);
         return "redirect:/products"; // Перенаправление после редактирования
     }
 
     @PostMapping("/delete/{id}")
     public String deleteProduct(@PathVariable Long id) {
-        productService.deleteById(id);
+        recordsService.deleteById(id);
         return "redirect:/products";
     }
 
@@ -100,13 +99,13 @@ public class ProductController {
                                @RequestParam(defaultValue = "asc") String sortDir,
                                @RequestParam(value = "search", required = false) String search, Model model) {
         Sort sort = sortDir.equalsIgnoreCase("asc") ? Sort.by(sortField).ascending() : Sort.by(sortField).descending();
-        Page<ProductModel> productsPage;
+        Page<RecordsModel> productsPage;
 
         // Пагинация и поиск по имени
         if (search != null && !search.isEmpty()) {
-            productsPage = productService.findByNameContainingIgnoreCase(search, PageRequest.of(page, size, sort));
+            productsPage = recordsService.findByNameContainingIgnoreCase(search, PageRequest.of(page, size, sort));
         } else {
-            productsPage = productService.findPaginated(PageRequest.of(page, size, sort));
+            productsPage = recordsService.findPaginated(PageRequest.of(page, size, sort));
         }
 
         model.addAttribute("productsPage", productsPage);

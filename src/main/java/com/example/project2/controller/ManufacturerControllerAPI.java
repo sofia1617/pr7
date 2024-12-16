@@ -1,7 +1,7 @@
 package com.example.project2.controller;
 
-import com.example.project2.model.ManufacturerModel;
-import com.example.project2.service.ManufacturerService;
+import com.example.project2.model.Product_and_materialsModel;
+import com.example.project2.service.Product_and_materialsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,39 +14,39 @@ import java.util.Optional;
 public class ManufacturerControllerAPI {
 
     @Autowired
-    private ManufacturerService manufacturerService;
+    private Product_and_materialsService productandmaterialsService;
 
     @GetMapping
-    public List<ManufacturerModel> getAllManufacturers() {
-        return manufacturerService.findAll();
+    public List<Product_and_materialsModel> getAllManufacturers() {
+        return productandmaterialsService.findAll();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ManufacturerModel> getManufacturerById(@PathVariable Long id) {
-        Optional<ManufacturerModel> manufacturer = manufacturerService.findById(id);
+    public ResponseEntity<Product_and_materialsModel> getManufacturerById(@PathVariable Long id) {
+        Optional<Product_and_materialsModel> manufacturer = productandmaterialsService.findById(id);
         return manufacturer.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @PostMapping
-    public ManufacturerModel createManufacturer(@RequestBody ManufacturerModel manufacturer) {
-        return manufacturerService.save(manufacturer);
+    public Product_and_materialsModel createManufacturer(@RequestBody Product_and_materialsModel manufacturer) {
+        return productandmaterialsService.save(manufacturer);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ManufacturerModel> updateManufacturer(@PathVariable Long id, @RequestBody ManufacturerModel manufacturerDetails) {
-        Optional<ManufacturerModel> manufacturerOptional = manufacturerService.findById(id);
+    public ResponseEntity<Product_and_materialsModel> updateManufacturer(@PathVariable Long id, @RequestBody Product_and_materialsModel manufacturerDetails) {
+        Optional<Product_and_materialsModel> manufacturerOptional = productandmaterialsService.findById(id);
         if (manufacturerOptional.isPresent()) {
-            ManufacturerModel manufacturer = manufacturerOptional.get();
+            Product_and_materialsModel manufacturer = manufacturerOptional.get();
             manufacturer.setName(manufacturerDetails.getName());
             // Добавьте другие поля для обновления, если они есть
-            return ResponseEntity.ok(manufacturerService.save(manufacturer));
+            return ResponseEntity.ok(productandmaterialsService.save(manufacturer));
         }
         return ResponseEntity.notFound().build();
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteManufacturer(@PathVariable Long id) {
-        manufacturerService.deleteById(id);
+        productandmaterialsService.deleteById(id);
         return ResponseEntity.noContent().build();
     }
 }

@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Список графиков</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-light bg-light mb-4">
+    <div class="collapse navbar-collapse">
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="/adminsalona/listUsers">Пользователи</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/adminsalona/listRoles">Роли</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/adminsalona/listProducts_and_materials">Товары и материалы</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/adminsalona/listChart">График</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/adminsalona/listServices">Услуги</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/adminsalona/listClients">Клиенты</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/adminsalona/listRecords">Записи</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/adminsalona/listSpecializations">Специальности</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+<div class="container mt-5">
+    <h1>Список графиков</h1>
+
+    <!-- Форма поиска -->
+    <form method="get" action="/adminsalona/listChart" class="mb-3">
+        <div class="form-group">
+            <label for="search">Поиск</label>
+            <input type="text" id="search" name="search" class="form-control" th:value="${search}" placeholder="Введите название графика">
+        </div>
+        <button type="submit" class="btn btn-primary">Искать</button>
+    </form>
+
+    <a href="/adminsalona/createChart" class="btn btn-primary mb-3">Создать график</a>
+
+    <!-- Если графики не найдены, показываем сообщение -->
+    <div th:if="${charts.isEmpty()}">
+        <div class="alert alert-warning" role="alert">
+            Нет доступных графиков.
+        </div>
+    </div>
+
+    <table class="table table-bordered">
+        <thead>
+        <tr>
+            <th>Название</th>
+            <th>День недели</th>
+            <th>Время</th>
+            <th>Сотрудник</th>
+            <th>Действия</th>
+        </tr>
+        </thead>
+        <tbody>
+        <!-- Перебираем все графики -->
+        <tr th:each="chart : ${charts}">
+            <td th:text="${chart.name}"></td>
+            <td th:text="${chart.dayOfWeek}"></td>
+            <td th:text="${chart.startTime + ' - ' + chart.endTime}"></td>
+            <td th:text="${chart.user.name + ' ' + chart.user.surname}"></td>
+            <td>
+                <a th:href="@{/adminsalona/listChart/edit/{id}(id=${chart.id})}" class="btn btn-warning">Редактировать</a>
+                <a th:href="@{/adminsalona/deleteChart/{id}(id=${chart.id})}" class="btn btn-danger">Удалить</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

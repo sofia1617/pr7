@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Редактировать Услугу</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container mt-5">
+    <h1 class="mb-4">Редактировать Услугу</h1>
+
+    <!-- Форма для редактирования услуги -->
+    <form th:action="@{/adminsalona/listServices/edit/{id}(id=${services.id})}"
+          th:object="${services}" method="post">
+        <input type="hidden" th:field="*{id}" />
+
+        <!-- Поле для номера услуги -->
+        <div class="form-group">
+            <label for="numberService">Номер Заказа</label>
+            <input type="text" class="form-control" id="numberService" th:field="*{numberServices}" required>
+        </div>
+
+        <!-- Выпадающий список пользователей -->
+        <div class="form-group">
+            <label for="user">Пользователь</label>
+            <select id="user" name="user.id" th:field="*{user.id}" class="form-control" required>
+                <option th:each="user : ${users}"
+                        th:value="${user.id}"
+                        th:text="${user.name + ' ' + user.surname}"
+                        th:selected="${user.id == services.user?.id}">
+                </option>
+            </select>
+        </div>
+
+        <!-- Множественный выбор записей -->
+        <div class="form-group">
+            <label for="records">Записи</label>
+            <select multiple id="records" name="records" th:field="*{servicesRecords}" class="form-control" required>
+                <option th:each="record : ${records}"
+                        th:value="${record.id}"
+                        th:text="${record.name}"
+                        th:selected="${#lists.contains(services.servicesRecords, record)}">
+                </option>
+            </select>
+            <small class="form-text text-muted">Удерживайте Ctrl для выбора нескольких записей.</small>
+        </div>
+
+        <!-- Выпадающий список статусов -->
+        <div class="form-group">
+            <label for="status">График</label>
+            <select id="status" name="status.id" th:field="*{chart.id}" class="form-control" required>
+                <option th:each="chart : ${chart}"
+                        th:value="${chart.id}"
+                        th:text="${chart.name}"
+                        th:selected="${chart.id == services.chart?.id}">
+                </option>
+            </select>
+        </div>
+
+        <!-- Кнопки действий -->
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary">Сохранить</button>
+            <a th:href="@{/adminsalona/listServices}" class="btn btn-secondary">Отмена</a>
+        </div>
+    </form>
+</div>
+</body>
+</html>

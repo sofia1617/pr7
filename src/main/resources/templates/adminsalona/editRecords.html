@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Редактировать запись</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container mt-5">
+  <h1>Редактировать запись</h1>
+  <form th:action="@{/adminsalona/listRecords/edit/{id}(id=${records.id})}" method="post" th:object="${records}">
+  <div class="form-group">
+      <label for="name">Название</label>
+      <input type="text" id="name" class="form-control" th:field="*{name}" required>
+    </div>
+    <div class="form-group">
+      <label for="description">Описание</label>
+      <textarea id="description" class="form-control" th:field="*{description}" required></textarea>
+    </div>
+    <div class="form-group">
+      <label for="price">Цена</label>
+      <input type="number" id="price" class="form-control" step="0.01" th:field="*{price}" required>
+    </div>
+    <div class="form-group">
+      <label for="count">Количество</label>
+      <input type="number" id="count" class="form-control" th:field="*{count}" required>
+    </div>
+    <div class="form-group">
+      <label for="clients">Клиент</label>
+      <select id="clients" class="form-control" th:field="*{client.id}">
+        <option th:each="client : ${clients}" th:value="${client.id}" th:text="${client.name}"></option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="product_and_materials">Материалы</label>
+      <select id="product_and_materials" class="form-control" th:field="*{product_and_materials.id}">
+        <option th:each="material : ${product_and_materials}" th:value="${material.id}" th:text="${material.name}"></option>
+      </select>
+    </div>
+    <button type="submit" class="btn btn-primary">Сохранить</button>
+    <a href="/adminsalona/listRecords" class="btn btn-secondary">Отмена</a>
+  </form>
+</div>
+</body>
+</html>

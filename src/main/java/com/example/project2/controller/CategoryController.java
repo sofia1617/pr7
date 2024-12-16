@@ -1,7 +1,7 @@
 package com.example.project2.controller;
 
-import com.example.project2.model.CategoryModel;
-import com.example.project2.service.CategoryService;
+import com.example.project2.model.ClientsModel;
+import com.example.project2.service.ClientsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,16 +14,16 @@ import java.util.Optional;
 @RequestMapping("/categories")
 public class CategoryController {
 
-    private final CategoryService categoryService;
+    private final ClientsService clientsService;
 
     @Autowired
-    public CategoryController(CategoryService categoryService) {
-        this.categoryService = categoryService;
+    public CategoryController(ClientsService clientsService) {
+        this.clientsService = clientsService;
     }
 
     @GetMapping
     public String listCategories(@RequestParam(value = "sort", required = false, defaultValue = "asc") String sortDirection, Model model) {
-        List<CategoryModel> categories = categoryService.findAllSorted(sortDirection);
+        List<ClientsModel> categories = clientsService.findAllSorted(sortDirection);
         model.addAttribute("categories", categories);
         model.addAttribute("currentSort", sortDirection);
         model.addAttribute("deleted", false);
@@ -34,7 +34,7 @@ public class CategoryController {
     public String searchCategories(@RequestParam("name") String name,
                                    @RequestParam(value = "sort", required = false, defaultValue = "asc") String sortDirection,
                                    Model model) {
-        List<CategoryModel> categories = categoryService.searchByName(name, sortDirection);
+        List<ClientsModel> categories = clientsService.searchByName(name, sortDirection);
         model.addAttribute("categories", categories);
         model.addAttribute("currentSort", sortDirection);
         model.addAttribute("deleted", false); // Добавьте это, если оно требуется в шаблоне
@@ -43,11 +43,11 @@ public class CategoryController {
 
     @GetMapping("/filter")
     public String filterCategories(@RequestParam(value = "deleted", required = false, defaultValue = "false") boolean showDeleted, Model model) {
-        List<CategoryModel> categories;
+        List<ClientsModel> categories;
         if (showDeleted) {
-            categories = categoryService.findAll(); // Заменено на findAll() для получения всех категорий
+            categories = clientsService.findAll(); // Заменено на findAll() для получения всех категорий
         } else {
-            categories = categoryService.findActiveCategories();
+            categories = clientsService.findActiveCategories();
         }
         model.addAttribute("categories", categories);
         model.addAttribute("deleted", !showDeleted);
@@ -56,19 +56,19 @@ public class CategoryController {
 
     @GetMapping("/create")
     public String showCreateForm(Model model) {
-        model.addAttribute("category", new CategoryModel());
+        model.addAttribute("category", new ClientsModel());
         return "createCategory";
     }
 
     @PostMapping // Здесь мы обрабатываем создание категории
-    public String createCategory(@ModelAttribute CategoryModel category) {
-        categoryService.save(category);
+    public String createCategory(@ModelAttribute ClientsModel category) {
+        clientsService.save(category);
         return "redirect:/categories";
     }
 
     @GetMapping("/edit/{id}")
     public String showEditForm(@PathVariable Long id, Model model) {
-        Optional<CategoryModel> category = categoryService.findById(id); // Изменено на Optional
+        Optional<ClientsModel> category = clientsService.findById(id); // Изменено на Optional
         if (category.isPresent()) {
             model.addAttribute("category", category.get()); // Получаем значение из Optional
             return "editCategory";
@@ -78,30 +78,30 @@ public class CategoryController {
     }
 
     @PostMapping("/edit/{id}") // Обработка обновления категории
-    public String updateCategory(@PathVariable Long id, @ModelAttribute CategoryModel category) {
+    public String updateCategory(@PathVariable Long id, @ModelAttribute ClientsModel category) {
         category.setId(id);
-        categoryService.save(category);
+        clientsService.save(category);
         return "redirect:/categories";
     }
 
     // Логическое удаление
     @GetMapping("/soft-delete/{id}")
     public String softDeleteCategory(@PathVariable Long id) {
-        categoryService.softDeleteById(id);
+        clientsService.softDeleteById(id);
         return "redirect:/categories";
     }
 
     // Восстановление
     @GetMapping("/restore/{id}")
     public String restoreCategory(@PathVariable Long id) {
-        categoryService.restoreById(id);
+        clientsService.restoreById(id);
         return "redirect:/categories";
     }
 
     // Физическое удаление
     @GetMapping("/hard-delete/{id}")
     public String hardDeleteCategory(@PathVariable Long id) {
-        categoryService.hardDeleteById(id);
+        clientsService.hardDeleteById(id);
         return "redirect:/categories";
     }
 }

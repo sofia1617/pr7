@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Добавить материал</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container mt-5">
+  <h1>Добавить материал</h1>
+  <form th:action="@{/adminsalona/createProduct_and_materials}" method="post" th:object="${product_and_materials}">
+    <div class="form-group">
+      <label for="name">Название материала:</label>
+      <input type="text" id="name" name="name" class="form-control" required th:field="*{name}">
+    </div>
+    <button type="submit" class="btn btn-primary">Добавить</button>
+    <a href="/adminsalona/listProducts_and_materials" class="btn btn-secondary">Отмена</a>
+  </form>
+</div>
+</body>
+</html>

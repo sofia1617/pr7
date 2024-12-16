@@ -29,9 +29,9 @@ public class SecurityConfig {
         http
                 .authorizeHttpRequests(authorizeRequests -> authorizeRequests
                         .requestMatchers("/auth/login", "/auth/register").permitAll() // Доступ для всех пользователей
-                        .requestMatchers("/user/products").hasRole("User") // Доступ для пользователей с ролью User
-                        .requestMatchers("/admin/**").hasRole("Admin") // Доступ для администраторов
-                        .requestMatchers("/superuser/**").hasRole("SUPERUSER") // Доступ для суперпользователей
+                        .requestMatchers("/employee/**").hasRole("Employee") // Доступ для пользователей с ролью User
+                        .requestMatchers("/adminbd/**").hasRole("AdminBD") // Доступ для администраторов
+                        .requestMatchers("/adminsalona/**").hasRole("AdminSalona") // Доступ для суперпользователей
                         .anyRequest().authenticated() // Все остальные запросы требуют аутентификации
                 )
                 .exceptionHandling(exceptions -> exceptions

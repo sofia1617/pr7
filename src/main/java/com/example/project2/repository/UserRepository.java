@@ -12,6 +12,9 @@ import java.util.Optional;
 @Repository
 public interface UserRepository extends JpaRepository<UserModel, Long> {
 
+    // Метод для подсчета пользователей по роли
+    long countByRoleName(String roleName); // Подсчет пользователей по имени роли
+
     Optional<UserModel> findByLogin(String login); // Поиск по логину
 
     boolean existsByLogin(@NotBlank(message = "Поле не может быть пустым")
@@ -20,4 +23,7 @@ public interface UserRepository extends JpaRepository<UserModel, Long> {
 
     // Метод для поиска пользователей по имени
     List<UserModel> findByNameContainingIgnoreCase(String name); // Поиск пользователей по имени
+
+    public UserModel findByUsername(String username); // Не возвращаем список
+
 }

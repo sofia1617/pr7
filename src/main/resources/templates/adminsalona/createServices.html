@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Создать услугу</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container mt-5">
+    <h1>Создать услугу</h1>
+    <form th:action="@{/adminsalona/createServices}" method="post" th:object="${service}">
+
+        <!-- Поле для номера услуги -->
+        <div class="form-group">
+            <label for="numberServices">Номер услуги</label>
+            <input type="text" id="numberServices" th:field="*{numberServices}" class="form-control" required>
+        </div>
+
+        <!-- Поле для номера записей -->
+        <div class="form-group">
+            <label for="numberRecords">Номер записей</label>
+            <input type="text" id="numberRecords" th:field="*{numberRecords}" class="form-control" required>
+        </div>
+
+        <!-- Выпадающий список для выбора пользователя -->
+        <div class="form-group">
+            <label for="user">Пользователь</label>
+            <select id="user" th:field="*{user.id}" class="form-control" required>
+                <option th:each="user : ${users}"
+                        th:value="${user.id}"
+                        th:text="${user.name + ' ' + user.surname}"></option>
+            </select>
+        </div>
+
+        <!-- Множественный выбор записей -->
+        <div class="form-group">
+            <label for="servicesRecords">Записи</label>
+            <select multiple id="servicesRecords" th:field="*{servicesRecords}" class="form-control" required>
+                <option th:each="record : ${records}"
+                        th:value="${record.id}"
+                        th:text="${record.name}"></option>
+            </select>
+        </div>
+
+        <!-- Выпадающий список для выбора дня недели -->
+        <div class="form-group">
+            <label for="chart">День недели</label>
+            <select id="chart" th:field="*{chart.id}" class="form-control" required>
+                <option th:each="chart : ${charts}"
+                        th:value="${chart.id}"
+                        th:text="${chart.name}"></option>
+            </select>
+        </div>
+
+        <!-- Кнопки сохранения и возврата -->
+        <button type="submit" class="btn btn-success">Сохранить</button>
+        <a href="/adminsalona/listServices" class="btn btn-secondary">Назад</a>
+    </form>
+</div>
+</body>
+</html>

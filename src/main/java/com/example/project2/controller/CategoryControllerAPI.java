@@ -1,7 +1,7 @@
 package com.example.project2.controller;
 
-import com.example.project2.model.CategoryModel;
-import com.example.project2.service.CategoryService;
+import com.example.project2.model.ClientsModel;
+import com.example.project2.service.ClientsService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -18,7 +18,7 @@ import java.util.Optional;
 public class CategoryControllerAPI {
 
     @Autowired
-    private CategoryService categoryService;
+    private ClientsService clientsService;
 
     @Operation(summary = "Get all categories")
     @ApiResponses(value = {
@@ -26,8 +26,8 @@ public class CategoryControllerAPI {
             @ApiResponse(responseCode = "404", description = "Categories not found")
     })
     @GetMapping
-    public List<CategoryModel> getAllCategories() {
-        return categoryService.findAll(); // Исправлено на findAll()
+    public List<ClientsModel> getAllCategories() {
+        return clientsService.findAll(); // Исправлено на findAll()
     }
 
     @Operation(summary = "Get a category by its id")
@@ -36,9 +36,9 @@ public class CategoryControllerAPI {
             @ApiResponse(responseCode = "404", description = "Category not found")
     })
     @GetMapping("/{id}")
-    public ResponseEntity<CategoryModel> getCategoryById(@Parameter(description = "id of category to be searched")
+    public ResponseEntity<ClientsModel> getCategoryById(@Parameter(description = "id of category to be searched")
                                                          @PathVariable Long id) {
-        Optional<CategoryModel> category = categoryService.findById(id); // Исправлено на findById
+        Optional<ClientsModel> category = clientsService.findById(id); // Исправлено на findById
         return category.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
@@ -48,8 +48,8 @@ public class CategoryControllerAPI {
             @ApiResponse(responseCode = "400", description = "Invalid input")
     })
     @PostMapping
-    public ResponseEntity<CategoryModel> createCategory(@RequestBody CategoryModel category) {
-        CategoryModel createdCategory = categoryService.save(category);
+    public ResponseEntity<ClientsModel> createCategory(@RequestBody ClientsModel category) {
+        ClientsModel createdCategory = clientsService.save(category);
         return ResponseEntity.status(201).body(createdCategory); // Возвращаем статус 201
     }
 
@@ -59,8 +59,8 @@ public class CategoryControllerAPI {
             @ApiResponse(responseCode = "404", description = "Category not found")
     })
     @PutMapping("/{id}")
-    public ResponseEntity<CategoryModel> updateCategory(@PathVariable Long id, @RequestBody CategoryModel categoryDetails) {
-        CategoryModel updatedCategory = categoryService.updateCategory(id, categoryDetails);
+    public ResponseEntity<ClientsModel> updateCategory(@PathVariable Long id, @RequestBody ClientsModel categoryDetails) {
+        ClientsModel updatedCategory = clientsService.updateCategory(id, categoryDetails);
         return updatedCategory != null ? ResponseEntity.ok(updatedCategory) : ResponseEntity.notFound().build();
     }
 
@@ -71,7 +71,7 @@ public class CategoryControllerAPI {
     })
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteCategory(@PathVariable Long id) {
-        categoryService.hardDeleteById(id); // Используем метод для физического удаления
+        clientsService.hardDeleteById(id); // Используем метод для физического удаления
         return ResponseEntity.noContent().build();
     }
 }

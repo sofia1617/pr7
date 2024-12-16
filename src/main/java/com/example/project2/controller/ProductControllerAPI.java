@@ -1,9 +1,9 @@
 package com.example.project2.controller;
 
-import com.example.project2.model.ProductModel;
-import com.example.project2.service.ProductService;
-import com.example.project2.service.CategoryService;
-import com.example.project2.service.ManufacturerService;
+import com.example.project2.model.RecordsModel;
+import com.example.project2.service.RecordsService;
+import com.example.project2.service.ClientsService;
+import com.example.project2.service.Product_and_materialsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,53 +12,53 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/products")
+@RequestMapping("/api/records")
 public class ProductControllerAPI {
 
     @Autowired
-    private ProductService productService;
+    private RecordsService recordsService;
 
     @Autowired
-    private CategoryService categoryService;
+    private ClientsService clientsService;
 
     @Autowired
-    private ManufacturerService manufacturerService;
+    private Product_and_materialsService productandmaterialsService;
 
     @GetMapping
-    public List<ProductModel> getAllProducts() {
-        return productService.findAll();
+    public List<RecordsModel> getAllProducts() {
+        return recordsService.findAll();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ProductModel> getProductById(@PathVariable Long id) {
-        Optional<ProductModel> product = productService.findById(id);
+    public ResponseEntity<RecordsModel> getProductById(@PathVariable Long id) {
+        Optional<RecordsModel> product = recordsService.findById(id);
         return product.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @PostMapping
-    public ProductModel createProduct(@RequestBody ProductModel product) {
-        return productService.save(product);
+    public RecordsModel createProduct(@RequestBody RecordsModel product) {
+        return recordsService.save(product);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ProductModel> updateProduct(@PathVariable Long id, @RequestBody ProductModel productDetails) {
-        Optional<ProductModel> productOptional = productService.findById(id);
+    public ResponseEntity<RecordsModel> updateProduct(@PathVariable Long id, @RequestBody RecordsModel productDetails) {
+        Optional<RecordsModel> productOptional = recordsService.findById(id);
         if (productOptional.isPresent()) {
-            ProductModel product = productOptional.get();
+            RecordsModel product = productOptional.get();
             product.setName(productDetails.getName());
             product.setDescription(productDetails.getDescription());
             product.setPrice(productDetails.getPrice());
-            product.setCategory(productDetails.getCategory());
-            product.setManufacturer(productDetails.getManufacturer());
+            product.setName(productDetails.getClient().getName());
+            product.setProduct_and_materials(productDetails.getProduct_and_materials());
             // Добавьте другие поля для обновления, если они есть
-            return ResponseEntity.ok(productService.save(product));
+            return ResponseEntity.ok(recordsService.save(product));
         }
         return ResponseEntity.notFound().build();
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteProduct(@PathVariable Long id) {
-        productService.deleteById(id);
+        recordsService.deleteById(id);
         return ResponseEntity.noContent().build();
     }
 }
