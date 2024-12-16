@@ -14,22 +14,21 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-
       - name: Checkout Code
         uses: actions/checkout@v3
-
 
       - name: Install OpenJDK 17
         run: |
           sudo apt update
           sudo apt install openjdk-17-jdk -y
 
-
       - name: Verify JDK installation
         run: |
           java -version
           javac -version
 
+      - name: Make mvnw executable
+        run: chmod +x ./mvnw
 
       - name: Run Syntax Check
         run: |
