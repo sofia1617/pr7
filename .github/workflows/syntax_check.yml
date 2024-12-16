@@ -20,14 +20,13 @@ jobs:
         uses: actions/setup-java@v3
         with:
           java-version: 17
-          distribution: 'adoptium'
+          distribution: 'adoptium'  # Исправленный дистрибутив
 
       - name: Verify JDK installation
         run: |
-          java -version  
+          java -version   
           javac -version  
 
       - name: Run Syntax Check
         run: |
           ./mvnw compile  
-
