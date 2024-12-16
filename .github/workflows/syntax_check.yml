@@ -20,8 +20,14 @@ jobs:
         uses: actions/setup-java@v3
         with:
           java-version: 17
-          distribution: 'adoptopenjdk'
+          distribution: 'adoptium'
+
+      - name: Verify JDK installation
+        run: |
+          java -version  
+          javac -version  
 
       - name: Run Syntax Check
         run: |
           ./mvnw compile  
+
