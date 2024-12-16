@@ -24,9 +24,9 @@ jobs:
 
       - name: Verify JDK installation
         run: |
-          java -version   
-          javac -version  
+          java -version   # Выводит текущую версию JDK
+          javac -version  # Проверяет версию компилятора Java
 
       - name: Run Syntax Check
         run: |
-          ./mvnw compile  
+          ./mvnw compile  # Проверка синтаксиса во время компиляции
